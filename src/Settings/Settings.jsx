@@ -185,17 +185,6 @@ export default function Settings() {
     }
 
     // TODO: if new, push directly. otherwise, overwrite existing
-    /*     const existingIndex = educationDetails.findIndex(
-      (item) => item.id === newEducationDetails.id
-    );
-    if (existingIndex !== -1) {
-      const updatedEducationDetails = [...educationDetails];
-      updatedEducationDetails[existingIndex] = newEducationDetails;
-      setEducationDetails(updatedEducationDetails);
-    } else {
-      // Push the new education details if no existing entry is found
-      setEducationDetails((prevState) => [...prevState, newEducationDetails]);
-    } */
   }
 
   function handleChangeEducationForm(event) {
