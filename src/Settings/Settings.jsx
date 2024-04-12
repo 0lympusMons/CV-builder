@@ -144,12 +144,7 @@ export default function Settings() {
     location: "",
   });
 
-  function handleChangeEducation(event) {
-    const { name, value } = event.target;
-    setEducationDetails((prevState) => {
-      return { ...prevState, [name]: value };
-    });
-  }
+  console.log(educationDetails);
 
   function toggleShowEducationForm() {
     setShowEducationForm((prevState) => !prevState);
