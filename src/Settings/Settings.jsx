@@ -167,24 +167,22 @@ export default function Settings() {
 
   function handleEducationSave(event) {
     event.preventDefault();
-    let newEducationDetails = educationFormDetails;
 
+    let newEducationDetails = educationFormDetails;
     let detailHasID = newEducationDetails.id === undefined ? false : true;
 
     if (detailHasID) {
       const existingIndex = educationDetails.findIndex(
         (item) => item.id === newEducationDetails.id
       );
-
       const updatedEducationDetails = [...educationDetails];
       updatedEducationDetails[existingIndex] = newEducationDetails;
       setEducationDetails(updatedEducationDetails);
     } else {
       newEducationDetails.id = nanoid();
+      newEducationDetails.hidden = false;
       setEducationDetails((prevState) => [...prevState, newEducationDetails]);
     }
-
-    // TODO: if new, push directly. otherwise, overwrite existing
   }
 
   function handleChangeEducationForm(event) {
@@ -210,12 +208,25 @@ export default function Settings() {
     toggleShowEducationForm();
   }
 
+  function toggleHiddenEducaton(id) {
+    setEducationDetails((prevState) => {
+      let newState = [...prevState];
+      newState.map((e) => {
+        if (e.id === id) {
+          e.hidden = !e.hidden;
+        }
+        return e;
+      });
+      return newState;
+    });
+  }
   let educationElements = (
     <ul className="education--schools">
       {educationDetails.map((object) => {
         return (
           <li key={object.id}>
             {object.school}
+
             <button
               onClick={() => {
                 deleteEducationDetail(object.id);
@@ -238,10 +249,12 @@ export default function Settings() {
                 alt="Edit Button"
               />
             </button>
-            <button>
+            <button onClick={() => toggleHiddenEducaton(object.id)}>
               <img
                 className="list-button hide-button"
-                src="./src/assets/icon-hide.svg"
+                src={`./src/assets/icon-${
+                  object.hidden ? "unhide" : "hide"
+                }.svg`}
                 alt="Hide Button"
               />
             </button>
