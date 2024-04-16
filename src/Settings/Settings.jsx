@@ -2,121 +2,10 @@ import React, { useState } from "react";
 import Card from "../components/Card";
 import { nanoid } from "nanoid";
 
-function EducationCard({
-  showEducationForm,
-  toggleShowEducationForm,
-  schools,
-  form,
-}) {
-  return (
-    <Card
-      className="card--education"
-      icon="icon-education.svg"
-      title="Education"
-    >
-      <div className="card-setting">
-        {!showEducationForm && schools}
-        {showEducationForm && form}
-
-        <button onClick={toggleShowEducationForm}>Education +</button>
-      </div>
-    </Card>
-  );
-}
-
-function EducationCardForm({
-  educationFormDetails,
-  handleChangeEducationForm,
-  handleEducationSave,
-  toggleShowEducationForm,
-  handleDelete,
-}) {
-  return (
-    <form>
-      <label htmlFor="school">
-        <p>School</p>
-        <input
-          type="text"
-          name="school"
-          id="school"
-          onChange={(event) => handleChangeEducationForm(event)}
-          value={educationFormDetails.school}
-        />
-      </label>
-
-      <label htmlFor="degree">
-        <p>Degree</p>
-        <input
-          type="text"
-          name="degree"
-          id="degree"
-          onChange={(event) => handleChangeEducationForm(event)}
-          value={educationFormDetails.degree}
-        />
-      </label>
-
-      <div className="form--dates">
-        <label htmlFor="startDate">
-          <p>Start date</p>
-          <input
-            type="text"
-            name="startDate"
-            id="startDate"
-            onChange={(event) => handleChangeEducationForm(event)}
-            value={educationFormDetails.startDate}
-          />
-        </label>
-
-        <label htmlFor="endDate">
-          <p>End date</p>
-          <input
-            type="text"
-            name="endDate"
-            id="endDate"
-            onChange={(event) => handleChangeEducationForm(event)}
-            value={educationFormDetails.endDate}
-          />
-        </label>
-      </div>
-
-      <label htmlFor="location">
-        <p>Location</p>
-        <input
-          type="text"
-          name="location"
-          id="location"
-          onChange={(event) => handleChangeEducationForm(event)}
-          value={educationFormDetails.location}
-        />
-      </label>
-
-      <div className="form-setting">
-        <button onClick={toggleShowEducationForm}>Cancel</button>
-        <button
-          onClick={(event) => {
-            handleEducationSave(event);
-            toggleShowEducationForm();
-          }}
-        >
-          Save
-        </button>
-        <button
-          onClick={(event) => {
-            handleDelete(event, educationFormDetails.id);
-          }}
-        >
-          Delete
-        </button>
-      </div>
-    </form>
-  );
-}
-
+import { EducationCard, EducationCardForm } from "./Education/EducationCard";
+import ExperienceCard from "./Experience/ExperienceCard";
 export default function Settings() {
-  function handleSubmit(event) {
-    event.preventDefault();
-  }
-
+  // * Personal
   const [personalDetails, setPersonalDetails] = useState({
     fullName: "",
     address: "",
@@ -134,6 +23,8 @@ export default function Settings() {
     });
   }
 
+  // * Education
+
   const [educationDetails, setEducationDetails] = useState([]);
   const [showEducationForm, setShowEducationForm] = useState(false);
   const [educationFormDetails, setEducationFormDetails] = useState({
@@ -143,8 +34,6 @@ export default function Settings() {
     endDate: "",
     location: "",
   });
-
-  console.log(educationDetails);
 
   function toggleShowEducationForm() {
     setShowEducationForm((prevState) => !prevState);
@@ -157,6 +46,13 @@ export default function Settings() {
       startDate: "",
       endDate: "",
       location: "",
+    });
+  }
+
+  function handleChangeEducationForm(event) {
+    const { name, value } = event.target;
+    setEducationFormDetails((prevState) => {
+      return { ...prevState, [name]: value };
     });
   }
 
@@ -178,13 +74,6 @@ export default function Settings() {
       newEducationDetails.hidden = false;
       setEducationDetails((prevState) => [...prevState, newEducationDetails]);
     }
-  }
-
-  function handleChangeEducationForm(event) {
-    const { name, value } = event.target;
-    setEducationFormDetails((prevState) => {
-      return { ...prevState, [name]: value };
-    });
   }
 
   function handleDelete(event, id) {
@@ -215,6 +104,8 @@ export default function Settings() {
       return newState;
     });
   }
+
+  // List of schools
   let educationElements = (
     <ul className="education--schools">
       {educationDetails.map((object) => {
@@ -247,7 +138,7 @@ export default function Settings() {
             <button onClick={() => toggleHiddenEducaton(object.id)}>
               <img
                 className="list-button hide-button"
-                src={`./src/assets/icon-${
+                src={`../src/assets/icon-${
                   object.hidden ? "unhide" : "hide"
                 }.svg`}
                 alt="Hide Button"
@@ -259,7 +150,7 @@ export default function Settings() {
     </ul>
   );
 
-  let form = (
+  let educationForm = (
     <EducationCardForm
       educationFormDetails={educationFormDetails}
       handleChangeEducationForm={handleChangeEducationForm}
@@ -270,6 +161,8 @@ export default function Settings() {
     />
   );
 
+  const [experienceArray, setExperienceArray] = useState([]);
+
   return (
     <div className="sidebar">
       <div className="form-setting">
@@ -277,14 +170,13 @@ export default function Settings() {
           <button>Clear</button>
           <button>Load Template</button>
         </div>
-
         {/* Personal Details */}
         <Card
           className="card--person"
           icon="icon-person.svg"
           title="Personal Details"
         >
-          <form onSubmit={(event) => handleSubmit(event)}>
+          <form onSubmit={(event) => event.preventDefault()}>
             <label htmlFor="fullName">
               <p>Full name</p>
               <input
@@ -330,33 +222,20 @@ export default function Settings() {
             </label>
           </form>
         </Card>
-
         {/* Education Details */}
-        <Card
-          className="card--education"
-          icon="icon-education.svg"
-          title="Education"
-        >
-          {!showEducationForm && educationElements}
-          {showEducationForm && form}
-          <div className="card-setting">
-            <button
-              onClick={() => {
-                toggleShowEducationForm();
-                emptyEducationForm();
-              }}
-            >
-              Education +
-            </button>
-          </div>
-        </Card>
+        <EducationCard
+          showEducationForm={showEducationForm}
+          emptyEducationForm={emptyEducationForm}
+          toggleShowEducationForm={toggleShowEducationForm}
+          schools={educationElements}
+          form={educationForm}
+        />
 
         {/* Experience Details */}
-        <Card
-          className="card--experience"
-          icon="icon-experience.svg"
-          title="Experience"
-        ></Card>
+        <ExperienceCard
+          experienceArray={experienceArray}
+          setExperienceArray={setExperienceArray}
+        />
       </div>
     </div>
   );
