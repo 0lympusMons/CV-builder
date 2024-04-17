@@ -71,6 +71,18 @@ export default function ExperienceCard({
     });
   }
 
+  function toggleHideData(id) {
+    setExperienceArray((prevState) => {
+      let newState = [...prevState];
+      newState.map((e) => {
+        if (e.id === id) {
+          e.hidden = !e.hidden;
+        }
+        return e;
+      });
+      return newState;
+    });
+  }
 
   /**********************************
    ***************element**************
@@ -106,7 +118,7 @@ export default function ExperienceCard({
                 alt="Edit Button"
               />
             </button>
-            <button onClick={() => toggleHideExperience(object.id)}>
+            <button onClick={() => toggleHideData(object.id)}>
               <img
                 className="list-button hide-button"
                 src={`../src/assets/icon-${
@@ -152,7 +164,7 @@ export default function ExperienceCard({
       title="Experience"
     >
       {!showExperienceForm && ExperienceElements}
-      {showExperienceForm && (
+      {(showExperienceForm && (
         <ExperienceForm
           formDetails={formDetails}
           setFormDetails={setFormDetails}
@@ -182,9 +194,7 @@ export default function ExperienceCard({
 
 function ExperienceForm({
   formDetails,
-  setFormDetails,
   saveForm,
-  emptyForm,
   deleteData,
   toggleShowForm,
   handleFormChange,

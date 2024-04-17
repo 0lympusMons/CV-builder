@@ -1,13 +1,137 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "../../components/Card";
+import { nanoid } from "nanoid";
 
-export function EducationCard({
-  showEducationForm,
-  emptyEducationForm,
-  toggleShowEducationForm,
-  schools,
-  form,
-}) {
+export default function EducationCard({ educationArray, setEducationArray }) {
+  /**********************************
+   ***************hooks**************
+   ********************************* */
+
+  const [showExperienceForm, setShowExperienceForm] = useState(false);
+  const [formDetails, setFormDetails] = useState({
+    school: "",
+    degree: "",
+    startDate: "",
+    endDate: "",
+    location: "",
+  });
+
+  /**********************************
+   ***************functions**************
+   ********************************* */
+
+  function toggleShowForm() {
+    setShowExperienceForm((prevState) => !prevState);
+  }
+  function saveForm(event) {
+    event.preventDefault();
+
+    let newEducation = formDetails;
+    let dataExists = newEducation.id === undefined ? false : true;
+
+    if (dataExists) {
+      const existingIndex = educationArray.findIndex(
+        (data) => data.id === newEducation.id
+      );
+      const updatedformDetails = [...educationArray];
+      updatedformDetails[existingIndex] = newEducation;
+      setEducationArray(updatedformDetails);
+    } else {
+      newEducation.id = nanoid();
+      newEducation.hidden = false;
+      setEducationArray((prevState) => [...prevState, newEducation]);
+    }
+  }
+
+  function deleteData(id) {
+    setEducationArray((prevState) =>
+      prevState.filter((data) => data.id !== id)
+    );
+  }
+
+  function emptyForm() {
+    setFormDetails({
+      school: "",
+      degree: "",
+      startDate: "",
+      endDate: "",
+      location: "",
+    });
+  }
+
+  function handleFormChange(event) {
+    const { name, value } = event.target;
+    setFormDetails((prevState) => {
+      return { ...prevState, [name]: value };
+    });
+  }
+
+  function toggleHideData(id) {
+    setEducationArray((prevState) => {
+      let newState = [...prevState];
+      newState.map((e) => {
+        if (e.id === id) {
+          e.hidden = !e.hidden;
+        }
+        return e;
+      });
+      return newState;
+    });
+  }
+
+  /**********************************
+   ***************element**************
+   ********************************* */
+
+  let EducationElements = (
+    <ul className="education--schools">
+      {educationArray.map((object) => {
+        return (
+          <li key={object.id}>
+            {object.school}
+
+            <button
+              onClick={() => {
+                deleteData(object.id);
+              }}
+            >
+              <img
+                className="list-button delete-button"
+                src="./src/assets/icon-delete.svg"
+                alt="Delete Button"
+              />
+            </button>
+            <button
+              onClick={() => {
+                setFormDetails(object);
+                toggleShowForm();
+              }}
+            >
+              <img
+                className="list-button edit-button"
+                src="./src/assets/icon-edit.svg"
+                alt="Edit Button"
+              />
+            </button>
+            <button onClick={() => toggleHideData(object.id)}>
+              <img
+                className="list-button hide-button"
+                src={`../src/assets/icon-${
+                  object.hidden ? "unhide" : "hide"
+                }.svg`}
+                alt="Hide Button"
+              />
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
+  /**********************************
+   ***************styles**************
+   ********************************* */
+
   const buttonStyle = {
     fontWeight: "700",
     fontSize: "1rem",
@@ -27,36 +151,46 @@ export function EducationCard({
     fontSize: "2rem",
     fontWeight: "500",
   };
+
   return (
     <Card
       className="card--education"
       icon="icon-education.svg"
       title="Education"
     >
-      {!showEducationForm && schools}
-      {showEducationForm && form}
-      <div className="card-setting">
-        <button
-          style={buttonStyle}
-          onClick={() => {
-            toggleShowEducationForm();
-            emptyEducationForm();
-          }}
-        >
-          Education
-          <span style={iconStyle}>+</span>
-        </button>
-      </div>
+      {!showExperienceForm && EducationElements}
+      {(showExperienceForm && (
+        <EducationForm
+          formDetails={formDetails}
+          saveForm={saveForm}
+          handleFormChange={handleFormChange}
+          toggleShowForm={toggleShowForm}
+          deleteData={deleteData}
+        />
+      )) || (
+        <div className="card-setting">
+          <button
+            style={buttonStyle}
+            onClick={() => {
+              toggleShowForm();
+              emptyForm();
+            }}
+          >
+            Education
+            <span style={iconStyle}>+</span>
+          </button>
+        </div>
+      )}
     </Card>
   );
 }
 
-export function EducationCardForm({
-  educationFormDetails,
-  handleChangeEducationForm,
-  handleEducationSave,
-  toggleShowEducationForm,
-  handleDelete,
+export function EducationForm({
+  formDetails,
+  saveForm,
+  deleteData,
+  toggleShowForm,
+  handleFormChange,
 }) {
   return (
     <form>
@@ -66,8 +200,8 @@ export function EducationCardForm({
           type="text"
           name="school"
           id="school"
-          onChange={(event) => handleChangeEducationForm(event)}
-          value={educationFormDetails.school}
+          onChange={(event) => handleFormChange(event)}
+          value={formDetails.school}
         />
       </label>
 
@@ -77,8 +211,8 @@ export function EducationCardForm({
           type="text"
           name="degree"
           id="degree"
-          onChange={(event) => handleChangeEducationForm(event)}
-          value={educationFormDetails.degree}
+          onChange={(event) => handleFormChange(event)}
+          value={formDetails.degree}
         />
       </label>
 
@@ -89,8 +223,8 @@ export function EducationCardForm({
             type="text"
             name="startDate"
             id="startDate"
-            onChange={(event) => handleChangeEducationForm(event)}
-            value={educationFormDetails.startDate}
+            onChange={(event) => handleFormChange(event)}
+            value={formDetails.startDate}
           />
         </label>
 
@@ -100,8 +234,8 @@ export function EducationCardForm({
             type="text"
             name="endDate"
             id="endDate"
-            onChange={(event) => handleChangeEducationForm(event)}
-            value={educationFormDetails.endDate}
+            onChange={(event) => handleFormChange(event)}
+            value={formDetails.endDate}
           />
         </label>
       </div>
@@ -112,24 +246,26 @@ export function EducationCardForm({
           type="text"
           name="location"
           id="location"
-          onChange={(event) => handleChangeEducationForm(event)}
-          value={educationFormDetails.location}
+          onChange={(event) => handleFormChange(event)}
+          value={formDetails.location}
         />
       </label>
 
       <div className="form-setting">
-        <button onClick={toggleShowEducationForm}>Cancel</button>
+        <button onClick={toggleShowForm}>Cancel</button>
         <button
           onClick={(event) => {
-            handleEducationSave(event);
-            toggleShowEducationForm();
+            saveForm(event);
+            toggleShowForm();
           }}
         >
           Save
         </button>
         <button
           onClick={(event) => {
-            handleDelete(event, educationFormDetails.id);
+            event.preventDefault();
+            toggleShowForm();
+            deleteData(formDetails.id);
           }}
         >
           Delete
