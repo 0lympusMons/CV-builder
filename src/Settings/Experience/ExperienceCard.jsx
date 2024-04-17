@@ -6,6 +6,10 @@ export default function ExperienceCard({
   experienceArray,
   setExperienceArray,
 }) {
+  /**********************************
+   ***************hooks**************
+   ********************************* */
+
   const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [formDetails, setFormDetails] = useState({
     company: "",
@@ -15,6 +19,10 @@ export default function ExperienceCard({
     location: "",
     description: "",
   });
+
+  /**********************************
+   ***************functions**************
+   ********************************* */
 
   function toggleShowForm() {
     setShowExperienceForm((prevState) => !prevState);
@@ -63,7 +71,10 @@ export default function ExperienceCard({
     });
   }
 
-  function toggleHideExperience(id) {}
+
+  /**********************************
+   ***************element**************
+   ********************************* */
 
   let ExperienceElements = (
     <ul className="education--companys">
@@ -109,6 +120,31 @@ export default function ExperienceCard({
       })}
     </ul>
   );
+
+  /**********************************
+   ***************styles**************
+   ********************************* */
+
+  const buttonStyle = {
+    fontWeight: "700",
+    fontSize: "1rem",
+    letterSpacing: "-0.01em",
+    color: "#000000",
+    border: "none",
+    background: "none",
+    cursor: "pointer",
+
+    display: "flex",
+    alignItems: "center",
+    gap: ".5rem",
+    height: "1.25rem",
+  };
+
+  const iconStyle = {
+    fontSize: "2rem",
+    fontWeight: "500",
+  };
+
   return (
     <Card
       className="card--experience"
@@ -126,17 +162,20 @@ export default function ExperienceCard({
           deleteData={deleteData}
           handleFormChange={handleFormChange}
         />
+      )) || (
+        <div className="card-setting">
+          <button
+            style={buttonStyle}
+            onClick={() => {
+              toggleShowForm();
+              emptyForm();
+            }}
+          >
+            Experience
+            <span style={iconStyle}>+</span>
+          </button>
+        </div>
       )}
-      <div className="card-setting">
-        <button
-          onClick={() => {
-            toggleShowForm();
-            emptyForm();
-          }}
-        >
-          Experience +
-        </button>
-      </div>
     </Card>
   );
 }

@@ -8,6 +8,25 @@ export function EducationCard({
   schools,
   form,
 }) {
+  const buttonStyle = {
+    fontWeight: "700",
+    fontSize: "1rem",
+    letterSpacing: "-0.01em",
+    color: "#000000",
+    border: "none",
+    background: "none",
+    cursor: "pointer",
+
+    display: "flex",
+    alignItems: "center",
+    gap: ".5rem",
+    height: "1.25rem",
+  };
+
+  const iconStyle = {
+    fontSize: "2rem",
+    fontWeight: "500",
+  };
   return (
     <Card
       className="card--education"
@@ -18,12 +37,14 @@ export function EducationCard({
       {showEducationForm && form}
       <div className="card-setting">
         <button
+          style={buttonStyle}
           onClick={() => {
             toggleShowEducationForm();
             emptyEducationForm();
           }}
         >
-          Education +
+          Education
+          <span style={iconStyle}>+</span>
         </button>
       </div>
     </Card>
