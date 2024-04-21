@@ -6,23 +6,26 @@ import ExperienceCard from "./Experience/ExperienceCard";
 import PersonalCard from "./Personal/PersonalCard";
 export default function Settings() {
 
-  const [personalDetails, setPersonalDetails] = useState({
-    fullName: "",
-    address: "",
-    email: "",
-    phoneNumber: "",
-  });
+  function clearEverything() {
+    setPersonalDetails({
+      fullName: "",
+      address: "",
+      email: "",
+      phoneNumber: "",
+    });
 
-  const [educationDetails, setEducationDetails] = useState([]);
+    setEducationArray([]);
 
-  const [experienceArray, setExperienceArray] = useState([]);
-
+    setExperienceArray([]);
+  }
   return (
-    <div className="sidebar">
-      <div className="form-setting">
-        <div className="form-setting--controls">
-          <button>Clear</button>
-          <button>Load Template</button>
+      {showClearModal && (
+        <ClearConfirmationModal
+          clearEverything={clearEverything}
+          toggleShowModal={}
+        />
+      )}
+            <button onClick={toggleShowModal}>Clear</button>
         </div>
         <PersonalCard
           personalDetails={personalDetails}
