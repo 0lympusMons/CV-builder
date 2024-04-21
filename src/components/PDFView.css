@@ -1,0 +1,76 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-wrap: wrap;
+  word-wrap: break-word;
+}
+
+#pdf-view {
+  display: flex;
+  flex-direction: column;
+}
+
+#content-id {
+  background-color: white;
+  width: 8.5in;
+  height: 11in;
+  margin: 15px;
+  padding: 32px;
+}
+
+.contact-info {
+  list-style: none;
+  margin-bottom: 32px;
+}
+.contact-info li {
+  margin: 8px 0;
+}
+.contact-info li > * {
+  font-size: 1rem;
+}
+
+.name-date,
+.position-degree--location {
+  display: flex;
+  justify-content: space-between;
+}
+
+.experience > * {
+  font-size: 12px;
+}
+.experience h2 {
+  letter-spacing: -0.0102em;
+  margin-bottom: 4px;
+}
+.experience .array {
+  list-style: none;
+}
+.experience .array .name-date {
+  font-weight: 600;
+}
+.experience .array .position-degree--location {
+  font-style: italic;
+}
+.experience .array li {
+  margin: 10px 0;
+}
+.experience .array li > * {
+  margin: 4px 0;
+}
+
+.work-experience {
+  margin: 24px 0;
+}
+
+#download-button {
+  font-weight: 600;
+  font-size: 21.33px;
+  margin-right: 15px;
+  color: #0144a8;
+  background: none;
+  border: none;
+  cursor: pointer;
+}/*# sourceMappingURL=PDFView.css.map */
