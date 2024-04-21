@@ -96,20 +96,6 @@ export default function Settings() {
 
           <ExperienceCard experienceArray={experienceArray} />
         </div>
-        <PersonalCard
-          personalDetails={personalDetails}
-          setPersonalDetails={setPersonalDetails}
-        />
-
-        <EducationCard
-          educationArray={educationDetails}
-          setEducationArray={setEducationDetails}
-        />
-
-        <ExperienceCard
-          experienceArray={experienceArray}
-          setExperienceArray={setExperienceArray}
-        />
       </div>
     </>
   );
