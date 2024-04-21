@@ -3,7 +3,11 @@ import { AppContext } from "../App";
 import EducationCard from "./Education/EducationCard";
 import ExperienceCard from "./Experience/ExperienceCard";
 import PersonalCard from "./Personal/PersonalCard";
+import ClearConfirmationModal from "../components/ClearConfirmationModal";
+
 export default function Settings() {
+  const [showClearModal, setShowModal] = useState(false);
+
   const {
     personalDetails,
     educationArray,
@@ -12,6 +16,10 @@ export default function Settings() {
     setEducationArray,
     setExperienceArray,
   } = useContext(AppContext);
+
+  function toggleShowModal() {
+    setShowModal((prevState) => !prevState);
+  }
   function clearEverything() {
     setPersonalDetails({
       fullName: "",
@@ -73,7 +81,7 @@ export default function Settings() {
       {showClearModal && (
         <ClearConfirmationModal
           clearEverything={clearEverything}
-          toggleShowModal={}
+          toggleShowModal={toggleShowModal}
         />
       )}
       <div className="sidebar">
