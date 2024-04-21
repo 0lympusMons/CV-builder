@@ -1,11 +1,16 @@
-import React, { useState } from "react";
-import Card from "../components/Card";
-
+import { AppContext } from "../App";
 import EducationCard from "./Education/EducationCard";
 import ExperienceCard from "./Experience/ExperienceCard";
 import PersonalCard from "./Personal/PersonalCard";
 export default function Settings() {
-
+  const {
+    personalDetails,
+    educationArray,
+    experienceArray,
+    setPersonalDetails,
+    setEducationArray,
+    setExperienceArray,
+  } = useContext(AppContext);
   function clearEverything() {
     setPersonalDetails({
       fullName: "",

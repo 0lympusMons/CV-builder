@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Card from "../../components/Card";
 import { nanoid } from "nanoid";
+import { AppContext } from "../../App";
 
-export default function ExperienceCard({
-  experienceArray,
-  setExperienceArray,
-}) {
+export default function ExperienceCard({ experienceArray }) {
   /**********************************
    ***************hooks**************
    ********************************* */
+  const { setExperienceArray } = useContext(AppContext);
 
   const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [formDetails, setFormDetails] = useState({
@@ -30,27 +29,26 @@ export default function ExperienceCard({
   function saveForm(event) {
     event.preventDefault();
 
-    let newExperience = formDetails;
-    let dataExists = newExperience.id === undefined ? false : true;
+    let newEducation = formDetails;
+    let dataExists = newEducation.id === undefined ? false : true;
 
     if (dataExists) {
       const existingIndex = experienceArray.findIndex(
-        (data) => data.id === newExperience.id
+        (data) => data.id === newEducation.id
       );
       const updatedformDetails = [...experienceArray];
-      updatedformDetails[existingIndex] = newExperience;
+      updatedformDetails[existingIndex] = newEducation;
       setExperienceArray(updatedformDetails);
     } else {
-      newExperience.id = nanoid();
-      newExperience.hidden = false;
-      setExperienceArray((prevState) => [...prevState, newExperience]);
+      newEducation.id = nanoid();
+      newEducation.hidden = false;
+      setExperienceArray([...experienceArray, newEducation]);
     }
   }
 
   function deleteData(id) {
-    setExperienceArray((prevState) =>
-      prevState.filter((data) => data.id !== id)
-    );
+    const updatedArray = experienceArray.filter((data) => data.id !== id);
+    setExperienceArray(updatedArray);
   }
 
   function emptyForm() {
@@ -72,16 +70,14 @@ export default function ExperienceCard({
   }
 
   function toggleHideData(id) {
-    setExperienceArray((prevState) => {
-      let newState = [...prevState];
-      newState.map((e) => {
-        if (e.id === id) {
-          e.hidden = !e.hidden;
-        }
-        return e;
-      });
-      return newState;
+    const updatedArray = [...experienceArray];
+    updatedArray.map((e) => {
+      if (e.id === id) {
+        e.hidden = !e.hidden;
+      }
+      return e;
     });
+    setExperienceArray(updatedArray);
   }
 
   /**********************************
@@ -89,44 +85,45 @@ export default function ExperienceCard({
    ********************************* */
 
   let ExperienceElements = (
-    <ul className="education--companys">
+    <ul className="experience--companies">
       {experienceArray.map((object) => {
         return (
           <li key={object.id}>
-            {object.company}
-
-            <button
-              onClick={() => {
-                deleteData(object.id);
-              }}
-            >
-              <img
-                className="list-button delete-button"
-                src="./src/assets/icon-delete.svg"
-                alt="Delete Button"
-              />
-            </button>
-            <button
-              onClick={() => {
-                setFormDetails(object);
-                toggleShowForm();
-              }}
-            >
-              <img
-                className="list-button edit-button"
-                src="./src/assets/icon-edit.svg"
-                alt="Edit Button"
-              />
-            </button>
-            <button onClick={() => toggleHideData(object.id)}>
-              <img
-                className="list-button hide-button"
-                src={`../src/assets/icon-${
-                  object.hidden ? "unhide" : "hide"
-                }.svg`}
-                alt="Hide Button"
-              />
-            </button>
+            <p className="company-school--name">{object.company}</p>
+            <div className="buttons">
+              <button
+                onClick={() => {
+                  deleteData(object.id);
+                }}
+              >
+                <img
+                  className="list-button delete-button"
+                  src="./src/assets/icon-delete.svg"
+                  alt="Delete Button"
+                />
+              </button>
+              <button
+                onClick={() => {
+                  setFormDetails(object);
+                  toggleShowForm();
+                }}
+              >
+                <img
+                  className="list-button edit-button"
+                  src="./src/assets/icon-edit.svg"
+                  alt="Edit Button"
+                />
+              </button>
+              <button onClick={() => toggleHideData(object.id)}>
+                <img
+                  className="list-button hide-button"
+                  src={`../src/assets/icon-${
+                    object.hidden ? "unhide" : "hide"
+                  }.svg`}
+                  alt="Hide Button"
+                />
+              </button>
+            </div>
           </li>
         );
       })}

@@ -1,18 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import Card from "../../components/Card";
+import App, { AppContext } from "../../App";
 
-export default function PersonalCard(personalDetails, setPersonalDetails) {
-
+export default function PersonalCard({ personalDetails }) {
+  const { setPersonalDetails } = useContext(AppContext);
+  console.log(personalDetails);
   function handleChange(event) {
     const { value, name } = event.target;
-    setPersonalDetails((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-      };
-    });
+    setPersonalDetails({ [name]: value });
   }
-  
+
   return (
     <Card
       className="card--person"

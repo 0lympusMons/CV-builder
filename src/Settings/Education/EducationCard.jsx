@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Card from "../../components/Card";
 import { nanoid } from "nanoid";
+import { AppContext } from "../../App";
 
-export default function EducationCard({ educationArray, setEducationArray }) {
+export default function EducationCard({ educationArray }) {
   /**********************************
    ***************hooks**************
    ********************************* */
+
+  const { setEducationArray } = useContext(AppContext);
 
   const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [formDetails, setFormDetails] = useState({
@@ -39,14 +42,13 @@ export default function EducationCard({ educationArray, setEducationArray }) {
     } else {
       newEducation.id = nanoid();
       newEducation.hidden = false;
-      setEducationArray((prevState) => [...prevState, newEducation]);
+      setEducationArray([...educationArray, newEducation]);
     }
   }
 
   function deleteData(id) {
-    setEducationArray((prevState) =>
-      prevState.filter((data) => data.id !== id)
-    );
+    const updatedArray = educationArray.filter((data) => data.id !== id);
+    setEducationArray(updatedArray);
   }
 
   function emptyForm() {
@@ -67,61 +69,62 @@ export default function EducationCard({ educationArray, setEducationArray }) {
   }
 
   function toggleHideData(id) {
-    setEducationArray((prevState) => {
-      let newState = [...prevState];
-      newState.map((e) => {
-        if (e.id === id) {
-          e.hidden = !e.hidden;
-        }
-        return e;
-      });
-      return newState;
+    const updatedArray = [...educationArray];
+    updatedArray.map((e) => {
+      if (e.id === id) {
+        e.hidden = !e.hidden;
+      }
+      return e;
     });
+    setEducationArray(updatedArray);
   }
 
   /**********************************
    ***************element**************
    ********************************* */
 
-  let EducationElements = (
+  const EducationElements = (
     <ul className="education--schools">
       {educationArray.map((object) => {
         return (
           <li key={object.id}>
-            {object.school}
+            <p className="company-school--name">{object.school}</p>
 
-            <button
-              onClick={() => {
-                deleteData(object.id);
-              }}
-            >
-              <img
-                className="list-button delete-button"
-                src="./src/assets/icon-delete.svg"
-                alt="Delete Button"
-              />
-            </button>
-            <button
-              onClick={() => {
-                setFormDetails(object);
-                toggleShowForm();
-              }}
-            >
-              <img
-                className="list-button edit-button"
-                src="./src/assets/icon-edit.svg"
-                alt="Edit Button"
-              />
-            </button>
-            <button onClick={() => toggleHideData(object.id)}>
-              <img
-                className="list-button hide-button"
-                src={`../src/assets/icon-${
-                  object.hidden ? "unhide" : "hide"
-                }.svg`}
-                alt="Hide Button"
-              />
-            </button>
+            <div className="buttons">
+              <button
+                onClick={() => {
+                  deleteData(object.id);
+                }}
+              >
+                <img
+                  className="list-button delete-button"
+                  src="./src/assets/icon-delete.svg"
+                  alt="Delete Button"
+                />
+              </button>
+
+              <button
+                onClick={() => {
+                  setFormDetails(object);
+                  toggleShowForm();
+                }}
+              >
+                <img
+                  className="list-button edit-button"
+                  src="./src/assets/icon-edit.svg"
+                  alt="Edit Button"
+                />
+              </button>
+              <button onClick={() => toggleHideData(object.id)}>
+                <img
+                  className="list-button hide-button"
+                  src={`../src/assets/icon-${
+                    object.hidden ? "unhide" : "hide"
+                  }.svg`}
+                  alt="Hide Button"
+                />
+              </button>
+            </div>
           </li>
         );
       })}
