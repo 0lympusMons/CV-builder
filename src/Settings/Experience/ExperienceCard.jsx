@@ -98,7 +98,7 @@ export default function ExperienceCard({ experienceArray }) {
               >
                 <img
                   className="list-button delete-button"
-                  src="./src/assets/icon-delete.svg"
+                  src="/icon-delete.svg"
                   alt="Delete Button"
                 />
               </button>
@@ -110,16 +110,14 @@ export default function ExperienceCard({ experienceArray }) {
               >
                 <img
                   className="list-button edit-button"
-                  src="./src/assets/icon-edit.svg"
+                  src="/icon-edit.svg"
                   alt="Edit Button"
                 />
               </button>
               <button onClick={() => toggleHideData(object.id)}>
                 <img
                   className="list-button hide-button"
-                  src={`../src/assets/icon-${
-                    object.hidden ? "unhide" : "hide"
-                  }.svg`}
+                  src={`./icon-${object.hidden ? "unhide" : "hide"}.svg`}
                   alt="Hide Button"
                 />
               </button>
